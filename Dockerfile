@@ -9,7 +9,7 @@ RUN bun install --frozen-lockfile --production
 
 COPY . .
 
-RUN bun build ./src/index.ts --compile --outfile zako-box-be
+RUN bun run build
 
 FROM ubuntu:24.04 as runner
 
