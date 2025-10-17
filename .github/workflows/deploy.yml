@@ -47,8 +47,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            docker stop zako-box-be
-            docker rm zako-box-be
-            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            docker pull ghcr.io/zako-dao/zako-box-be:${{ github.ref_name }}
-            docker run -it --restart=always -p 3000:3000 --name zako-box-be ghcr.io/zako-dao/zako-box-be:${{ github.ref_name }}
+            sudo docker stop zako-box-be
+            sudo docker rm zako-box-be
+            sudo docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+            sudo docker pull ghcr.io/zako-dao/zako-box-be:${{ github.ref_name }}
+            sudo docker run -it --restart=always -p 3000:3000 --name zako-box-be ghcr.io/zako-dao/zako-box-be:${{ github.ref_name }}
