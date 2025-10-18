@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'bun:test'
 
 import { testClient } from 'hono/testing'
-import { messageToSign } from './message-to-sign'
 import { redisClient } from '../../db/redis'
+import { messageToSign } from './message-to-sign'
 
 describe('get message to sign', async () => {
   const client = testClient(messageToSign)
