@@ -6,6 +6,26 @@
 bun dev
 ```
 
+## Testing
+
+Start the database and redis containers.
+
+```
+docker compose up -d --remove-orphans
+```
+
+Run the tests.
+
+```
+bun test
+```
+
+Stop the database and redis containers.
+
+```
+docker compose down
+```
+
 ## Production
 
 ```
