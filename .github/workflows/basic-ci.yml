@@ -27,6 +27,24 @@ jobs:
       - uses: ./.github/actions/setup-bun
       - name: Build
         run: bun run build
+
+  test:
+    name: Test
+    services:
+      redis:
+        image: redis:7
+        ports:
+          - 16379:6379
+        env:
+          REDIS_USERNAME: redis
+          REDIS_PASSWORD: redis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+      - name: Test
+        run: bun test
+
   typecheck:
     name: Type Check
     runs-on: ubuntu-latest

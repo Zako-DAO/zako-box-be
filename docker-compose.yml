@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:17
+    ports:
+      - 15432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    networks:
+      - zako-box-network
+
+  redis:
+    image: redis:7
+    ports:
+      - 16379:6379
+    environment:
+      REDIS_USERNAME: redis
+      REDIS_PASSWORD: redis
+    networks:
+      - zako-box-network
+
+networks:
+  zako-box-network:
+    driver: bridge
