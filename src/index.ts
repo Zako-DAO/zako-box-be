@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { githubOAuth, sessions } from './handlers'
-import './db'
 import { sessionMessages } from './handlers/session-message'
+import './db'
 
 if (!Bun.env.JWT_SECRET || !Bun.env.JWT_ISSUER) {
   throw new Error('JWT_SECRET and JWT_ISSUER are required')

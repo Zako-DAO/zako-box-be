@@ -1,12 +1,22 @@
-import { describe, expect, it } from 'bun:test'
+import { afterAll, beforeAll, describe, expect, it, jest } from 'bun:test'
 
 import { testClient } from 'hono/testing'
-import { sessionMessages } from './index'
-import { redis } from 'bun'
+import { redis } from '../../db'
 import { getSessionMessageKey } from '../../utils/redis'
+import { generateSessionMessage } from '../../utils/session-message'
+import { sessionMessages } from './index'
 
-describe('get message to sign', async () => {
+describe('create session message', async () => {
   const client = testClient(sessionMessages)
+
+  beforeAll(() => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date('2025-01-01T00:00:00.000Z'))
+  })
+
+  afterAll(() => {
+    jest.useRealTimers()
+  })
 
   it('should return 400 if address is not provided', async () => {
     const response = await client.index.$post()
@@ -31,11 +41,7 @@ describe('get message to sign', async () => {
       },
     })
 
-    const expectedMessage = `Welcome to ZakoBox/ZakoPako!
-
-Sign in with your wallet to continue. This request will not trigger a blockchain transaction or cost any gas fees.
-
-Your address is 0x5b31d41b0a3de9225d571f3df47499e3f5b3d09c and this message is valid for 1 minute.`
+    const expectedMessage = generateSessionMessage(Bun.env.TEST_ETH_ADDRESS)
 
     expect(response.status).toBe(200)
     expect(await response.json()).toEqual({ data: expectedMessage })

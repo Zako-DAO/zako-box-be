@@ -1,7 +1,8 @@
-import { redis } from 'bun'
 import { Hono } from 'hono'
 import { isAddress } from 'viem'
+import { redis } from '../../db'
 import { getSessionMessageKey } from '../../utils/redis'
+import { generateSessionMessage } from '../../utils/session-message'
 
 export const sessionMessages = new Hono()
   .post('/', async (c) => {
@@ -14,11 +15,7 @@ export const sessionMessages = new Hono()
       return c.json({ error: 'Invalid address, or wrong checksum format' }, 400)
     }
 
-    const message = `Welcome to ZakoBox/ZakoPako!
-
-Sign in with your wallet to continue. This request will not trigger a blockchain transaction or cost any gas fees.
-
-Your address is ${address} and this message is valid for 1 minute.`
+    const message = generateSessionMessage(address)
 
     await redis.setex(getSessionMessageKey(address), 60, message)
 
