@@ -49,8 +49,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-bun
+      - name: Prepare Database
+        run: bun run db:migrate
       - name: Test
         run: bun test
+
+  # FIXME: add drizzle generation diff check
 
   typecheck:
     name: Type Check
