@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'bun:test'
 
 import { testClient } from 'hono/testing'
-import { redisClient } from '../../db/redis'
-import { messageToSign } from './message-to-sign'
+import { sessions } from './index'
+import { redis } from 'bun'
+import { getSessionMessageKey } from '../../utils/redis'
+import { sign } from 'viem/accounts'
 
 describe('get message to sign', async () => {
-  const client = testClient(messageToSign)
+  const client = testClient(sessions)
 
   it('should return 400 if address is not provided', async () => {
     const response = await client.index.$post()
@@ -23,23 +25,15 @@ describe('get message to sign', async () => {
     expect(await response.json()).toEqual({ error: 'Invalid address, or wrong checksum format' })
   })
 
-  it('should return message if address is a valid address', async () => {
+  it('should return 401 if session message is not found', async () => {
+    const signedMessage = sign({})
+
     const response = await client.index.$post({
       query: {
-        address: Bun.env.TEST_ETH_ADDRESS,
+        address: '0x5b31d41b0a3de9225d571f3df47499e3f5b3d09c',
       },
     })
-
-    const expectedMessage = `Welcome to ZakoBox/ZakoPako!
-
-Sign in with your wallet to continue. This request will not trigger a blockchain transaction or cost any gas fees.
-
-Your address is 0x5b31d41b0a3de9225d571f3df47499e3f5b3d09c and this message is valid for 1 minute.`
-
-    expect(response.status).toBe(200)
-    expect(await response.json()).toEqual({ data: expectedMessage })
-
-    const message = await redisClient.getdel(`session:message:${Bun.env.TEST_ETH_ADDRESS}`)
-    expect(message).toEqual(expectedMessage)
+    expect(response.status).toBe(401)
+    expect(await response.json()).toEqual({ error: 'Session message not found' })
   })
 })

@@ -1,9 +1,15 @@
 import { Hono } from 'hono'
 import { githubOAuth, sessions } from './handlers'
 import './db'
+import { sessionMessages } from './handlers/session-message'
+
+if (!Bun.env.JWT_SECRET || !Bun.env.JWT_ISSUER) {
+  throw new Error('JWT_SECRET and JWT_ISSUER are required')
+}
 
 const app = new Hono()
   .route('/sessions', sessions)
+  .route('/session-messages', sessionMessages)
   .route('/github-oauth', githubOAuth)
 
 export default {

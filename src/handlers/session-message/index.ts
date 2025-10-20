@@ -1,8 +1,9 @@
+import { redis } from 'bun'
 import { Hono } from 'hono'
 import { isAddress } from 'viem'
-import { redisClient } from '../../db'
+import { getSessionMessageKey } from '../../utils/redis'
 
-export const messageToSign = new Hono()
+export const sessionMessages = new Hono()
   .post('/', async (c) => {
     const address = c.req.query('address')
     if (!address) {
@@ -19,7 +20,7 @@ Sign in with your wallet to continue. This request will not trigger a blockchain
 
 Your address is ${address} and this message is valid for 1 minute.`
 
-    await redisClient.setex(`session:message:${address}`, 60, message)
+    await redis.setex(getSessionMessageKey(address), 60, message)
 
     return c.json({ data: message })
   })
