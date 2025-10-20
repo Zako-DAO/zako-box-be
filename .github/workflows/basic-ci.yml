@@ -36,8 +36,15 @@ jobs:
         ports:
           - 16379:6379
         env:
-          REDIS_USERNAME: redis
           REDIS_PASSWORD: redis
+      postgres:
+        image: postgres:16
+        ports:
+          - 15432:5432
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
