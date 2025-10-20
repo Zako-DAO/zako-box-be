@@ -51,6 +51,8 @@ jobs:
       - uses: ./.github/actions/setup-bun
       - name: Prepare Database
         run: bun run db:migrate
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:15432/postgres
       - name: Test
         run: bun test
 
