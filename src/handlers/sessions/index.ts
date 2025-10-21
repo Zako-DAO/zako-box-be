@@ -79,7 +79,7 @@ export const sessions = new Hono<{ Variables: JwtVariables }>()
     setCookie(c, 'session', jwt, {
       httpOnly: true,
       maxAge: 60 * 60 * 24,
-      sameSite: 'strict'
+      sameSite: 'strict',
     })
 
     return c.json({ data: user }, 201)

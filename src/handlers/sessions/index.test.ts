@@ -203,7 +203,6 @@ describe('create session', async () => {
   })
 })
 
-
 describe('delete session', async () => {
   beforeEach(async () => {
     await db.execute('BEGIN;')
