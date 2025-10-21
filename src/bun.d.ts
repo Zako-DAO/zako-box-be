@@ -9,5 +9,7 @@ declare module 'bun' {
 
     TEST_ETH_ADDRESS: `0x${string}`
     TEST_ETH_PRIVATE_KEY: `0x${string}`
+
+    BUN_ENV: 'development' | 'production' | 'staging' | 'testing'
   }
 }

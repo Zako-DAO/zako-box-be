@@ -6,7 +6,8 @@ import { generateSessionMessage } from '../../utils/session-message'
 
 export const sessionMessages = new Hono()
   .post('/', async (c) => {
-    const address = c.req.query('address')
+    const body = await c.req.json()
+    const address = body.address as `0x${string}`
     if (!address) {
       return c.json({ error: 'Address is required' }, 400)
     }
