@@ -4,7 +4,7 @@
 
 ```
 docker compose down
-docker compose up -d --remove-orhpans
+docker compose up -d --remove-orphans
 
 bun db:migrate
 bun dev
