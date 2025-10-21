@@ -3,6 +3,10 @@
 ## Development
 
 ```
+docker compose down
+docker compose up -d --remove-orhpans
+
+bun db:migrate
 bun dev
 ```
 
@@ -11,12 +15,14 @@ bun dev
 Start the database and redis containers.
 
 ```
+docker compose down
 docker compose up -d --remove-orphans
 ```
 
 Run the tests.
 
 ```
+bun db:migrate
 bun test
 ```
 
