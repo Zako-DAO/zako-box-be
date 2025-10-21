@@ -64,7 +64,7 @@ describe('create session', async () => {
       method: 'POST',
       body: JSON.stringify({
         signature: 'placeholder',
-      })
+      }),
     })
 
     const response = await sessions.request(req)
@@ -77,7 +77,7 @@ describe('create session', async () => {
       method: 'POST',
       body: JSON.stringify({
         address: Bun.env.TEST_ETH_ADDRESS,
-      })
+      }),
     })
 
     const response = await sessions.request(req)
@@ -91,7 +91,7 @@ describe('create session', async () => {
       body: JSON.stringify({
         address: 'invalid-address',
         signature: 'placeholder',
-      })
+      }),
     })
 
     const response = await sessions.request(req)
@@ -111,7 +111,7 @@ describe('create session', async () => {
       body: JSON.stringify({
         address: Bun.env.TEST_ETH_ADDRESS,
         signature,
-      })
+      }),
     })
 
     const response = await sessions.request(req)
@@ -129,7 +129,7 @@ describe('create session', async () => {
       body: JSON.stringify({
         address: Bun.env.TEST_ETH_ADDRESS,
         signature: 'invalid-signature',
-      })
+      }),
     })
 
     const response = await sessions.request(req)
@@ -154,7 +154,7 @@ describe('create session', async () => {
       body: JSON.stringify({
         address: Bun.env.TEST_ETH_ADDRESS,
         signature,
-      })
+      }),
     })
 
     const response = await sessions.request(req)
@@ -176,7 +176,7 @@ describe('create session', async () => {
       body: JSON.stringify({
         address: Bun.env.TEST_ETH_ADDRESS,
         signature,
-      })
+      }),
     })
 
     const response = await sessions.request(req)
