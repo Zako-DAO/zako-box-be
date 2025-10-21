@@ -20,8 +20,8 @@ describe('create session message', async () => {
 
   it('should return 400 if address is not provided', async () => {
     const response = await client.index.$post()
-    expect(response.status).toBe(400)
     expect(await response.json()).toEqual({ error: 'Address is required' })
+    expect(response.status).toBe(400)
   })
 
   it('should return 400 if address is not a valid address', async () => {
@@ -30,8 +30,8 @@ describe('create session message', async () => {
         address: 'invalid-address',
       },
     })
-    expect(response.status).toBe(400)
     expect(await response.json()).toEqual({ error: 'Invalid address, or wrong checksum format' })
+    expect(response.status).toBe(400)
   })
 
   it('should return message if address is a valid address', async () => {
@@ -42,11 +42,11 @@ describe('create session message', async () => {
     })
 
     const expectedMessage = generateSessionMessage(Bun.env.TEST_ETH_ADDRESS)
-
-    expect(response.status).toBe(200)
     expect(await response.json()).toEqual({ data: expectedMessage })
 
     const message = await redis.getdel(getSessionMessageKey(Bun.env.TEST_ETH_ADDRESS))
     expect(message).toEqual(expectedMessage)
+
+    expect(response.status).toBe(200)
   })
 })

@@ -25,8 +25,9 @@ export const sessions = new Hono<{ Variables: JwtVariables }>()
     return c.json({ data: jwtPayload.user })
   })
   .post('/', async (c) => {
-    const address = c.req.query('address')
-    const signature = c.req.query('signature') as `0x${string}`
+    const body = await c.req.json()
+    const address = body.address as `0x${string}`
+    const signature = body.signature as `0x${string}`
 
     if (!address || !signature) {
       return c.json({ error: 'Address and signature are required' }, 400)
@@ -76,5 +77,5 @@ export const sessions = new Hono<{ Variables: JwtVariables }>()
       iss: Bun.env.JWT_ISSUER,
     }, Bun.env.JWT_SECRET))
 
-    return c.json({ data: user })
+    return c.json({ data: user }, 201)
   })

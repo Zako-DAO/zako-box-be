@@ -8,6 +8,7 @@ if (!Bun.env.JWT_SECRET || !Bun.env.JWT_ISSUER) {
 }
 
 const app = new Hono()
+  .basePath('/api/v1')
   .route('/sessions', sessions)
   .route('/session-messages', sessionMessages)
   .route('/github-oauth', githubOAuth)

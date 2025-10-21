@@ -15,19 +15,18 @@ describe('get session', async () => {
 
   it('should return 401 if no session is set', async () => {
     const response = await client.index.$get()
-    expect(response.status).toBe(401)
     expect(await response.json()).toEqual({ error: 'Unauthorized' })
+    expect(response.status).toBe(401)
   })
 
   it('should return 401 if cookie is empty', async () => {
-    const response = await sessions.request('/', {
-      method: 'GET',
+    const response = await client.index.$get({}, {
       headers: {
         Cookie: 'session=',
       },
     })
-    expect(response.status).toBe(401)
     expect(await response.json()).toEqual({ error: 'Unauthorized' })
+    expect(response.status).toBe(401)
   })
 
   it('should return 200 if session is set', async () => {
@@ -40,20 +39,17 @@ describe('get session', async () => {
       iss: Bun.env.JWT_ISSUER,
     }, Bun.env.JWT_SECRET)
 
-    const response = await sessions.request('/', {
-      method: 'GET',
+    const response = await client.index.$get({}, {
       headers: {
         Cookie: `session=${cookie}`,
       },
     })
-    expect(response.status).toBe(200)
     expect(await response.json()).toEqual({ data: { address: Bun.env.TEST_ETH_ADDRESS, displayName: Bun.env.TEST_ETH_ADDRESS } })
+    expect(response.status).toBe(200)
   })
 })
 
 describe('create session', async () => {
-  const client = testClient(sessions)
-
   beforeEach(async () => {
     await db.execute('BEGIN;')
   })
@@ -64,34 +60,43 @@ describe('create session', async () => {
   })
 
   it('should return 400 if address is not provided', async () => {
-    const response = await client.index.$post({
-      query: {
+    const req = new Request('http://localhost/', {
+      method: 'POST',
+      body: JSON.stringify({
         signature: 'placeholder',
-      },
+      })
     })
-    expect(response.status).toBe(400)
+
+    const response = await sessions.request(req)
     expect(await response.json()).toEqual({ error: 'Address and signature are required' })
+    expect(response.status).toBe(400)
   })
 
   it('should return 400 if signature is not provided', async () => {
-    const response = await client.index.$post({
-      query: {
+    const req = new Request('http://localhost/', {
+      method: 'POST',
+      body: JSON.stringify({
         address: Bun.env.TEST_ETH_ADDRESS,
-      },
+      })
     })
-    expect(response.status).toBe(400)
+
+    const response = await sessions.request(req)
     expect(await response.json()).toEqual({ error: 'Address and signature are required' })
+    expect(response.status).toBe(400)
   })
 
   it('should return 400 if address is not a valid address', async () => {
-    const response = await client.index.$post({
-      query: {
+    const req = new Request('http://localhost/', {
+      method: 'POST',
+      body: JSON.stringify({
         address: 'invalid-address',
         signature: 'placeholder',
-      },
+      })
     })
-    expect(response.status).toBe(400)
+
+    const response = await sessions.request(req)
     expect(await response.json()).toEqual({ error: 'Invalid address, or wrong checksum format' })
+    expect(response.status).toBe(400)
   })
 
   it('should return 401 if session message is not found', async () => {
@@ -101,14 +106,17 @@ describe('create session', async () => {
       privateKey: Bun.env.TEST_ETH_PRIVATE_KEY,
     })
 
-    const response = await client.index.$post({
-      query: {
+    const req = new Request('http://localhost/', {
+      method: 'POST',
+      body: JSON.stringify({
         address: Bun.env.TEST_ETH_ADDRESS,
         signature,
-      },
+      })
     })
-    expect(response.status).toBe(404)
+
+    const response = await sessions.request(req)
     expect(await response.json()).toEqual({ error: 'Session message not found' })
+    expect(response.status).toBe(404)
   })
 
   it('should return 400 if signature is not a valid signature', async () => {
@@ -116,14 +124,17 @@ describe('create session', async () => {
     const redisKey = getSessionMessageKey(Bun.env.TEST_ETH_ADDRESS)
     await redis.set(redisKey, message)
 
-    const response = await client.index.$post({
-      query: {
+    const req = new Request('http://localhost/', {
+      method: 'POST',
+      body: JSON.stringify({
         address: Bun.env.TEST_ETH_ADDRESS,
         signature: 'invalid-signature',
-      },
+      })
     })
-    expect(response.status).toBe(400)
+
+    const response = await sessions.request(req)
     expect(await response.json()).toEqual({ error: 'Invalid session message signature' })
+    expect(response.status).toBe(400)
   })
 
   it('should return user if address and signature are valid', async () => {
@@ -138,14 +149,17 @@ describe('create session', async () => {
       privateKey: Bun.env.TEST_ETH_PRIVATE_KEY,
     })
 
-    const response = await client.index.$post({
-      query: {
+    const req = new Request('http://localhost/', {
+      method: 'POST',
+      body: JSON.stringify({
         address: Bun.env.TEST_ETH_ADDRESS,
         signature,
-      },
+      })
     })
-    expect(response.status).toBe(200)
+
+    const response = await sessions.request(req)
     expect(await response.text()).toEqual(JSON.stringify({ data: expectedUser }))
+    expect(response.status).toBe(201)
   })
 
   it('should create and return user if it does not exist', async () => {
@@ -157,13 +171,15 @@ describe('create session', async () => {
       privateKey: Bun.env.TEST_ETH_PRIVATE_KEY,
     })
 
-    const response = await client.index.$post({
-      query: {
+    const req = new Request('http://localhost/', {
+      method: 'POST',
+      body: JSON.stringify({
         address: Bun.env.TEST_ETH_ADDRESS,
         signature,
-      },
+      })
     })
-    expect(response.status).toBe(200)
+
+    const response = await sessions.request(req)
 
     const body = await response.json()
     expect('error' in body).toBeFalse()
@@ -183,5 +199,6 @@ describe('create session', async () => {
       updatedAt: new Date(body.data.updatedAt),
     }])
     expect(response.headers.get('Set-Cookie')).toContain('session=')
+    expect(response.status).toBe(201)
   })
 })
