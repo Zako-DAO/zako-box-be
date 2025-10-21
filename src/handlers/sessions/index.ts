@@ -1,7 +1,7 @@
 import type { JwtVariables } from 'hono/jwt'
 import { eq } from 'drizzle-orm'
 import { Hono } from 'hono'
-import { setCookie } from 'hono/cookie'
+import { deleteCookie, setCookie } from 'hono/cookie'
 import { sign, verify } from 'hono/jwt'
 import { isAddress, verifyMessage } from 'viem'
 import { db, redis } from '../../db'
@@ -37,7 +37,7 @@ export const sessions = new Hono<{ Variables: JwtVariables }>()
       return c.json({ error: 'Invalid address, or wrong checksum format' }, 400)
     }
 
-    const rawMessage = await redis.get(getSessionMessageKey(address))
+    const rawMessage = (await redis.get(getSessionMessageKey(address))) as `0x${string}`
     if (!rawMessage) {
       return c.json({ error: 'Session message not found' }, 404)
     }
@@ -46,7 +46,7 @@ export const sessions = new Hono<{ Variables: JwtVariables }>()
     try {
       verified = await verifyMessage({
         address,
-        message: rawMessage,
+        message: { raw: rawMessage },
         signature,
       })
     }
@@ -69,13 +69,22 @@ export const sessions = new Hono<{ Variables: JwtVariables }>()
     const user = usersResult[0]
 
     const timeSecondNow = Math.floor(Date.now() / 1000)
-    setCookie(c, 'session', await sign({
+    const jwt = await sign({
       user,
       exp: timeSecondNow + 60 * 60 * 24,
       nbf: timeSecondNow,
       iat: timeSecondNow,
       iss: Bun.env.JWT_ISSUER,
-    }, Bun.env.JWT_SECRET))
+    }, Bun.env.JWT_SECRET)
+    setCookie(c, 'session', jwt, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 24,
+      sameSite: 'strict'
+    })
 
     return c.json({ data: user }, 201)
+  })
+  .delete('/', async (c) => {
+    deleteCookie(c, 'session')
+    return c.json({ data: 'Session deleted' }, 200)
   })

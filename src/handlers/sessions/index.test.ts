@@ -145,7 +145,7 @@ describe('create session', async () => {
     await redis.set(redisKey, message)
 
     const signature = await signMessage({
-      message,
+      message: { raw: message },
       privateKey: Bun.env.TEST_ETH_PRIVATE_KEY,
     })
 
@@ -167,7 +167,7 @@ describe('create session', async () => {
     await redis.set(getSessionMessageKey(Bun.env.TEST_ETH_ADDRESS), message)
 
     const signature = await signMessage({
-      message,
+      message: { raw: message },
       privateKey: Bun.env.TEST_ETH_PRIVATE_KEY,
     })
 
@@ -200,5 +200,25 @@ describe('create session', async () => {
     }])
     expect(response.headers.get('Set-Cookie')).toContain('session=')
     expect(response.status).toBe(201)
+  })
+})
+
+
+describe('delete session', async () => {
+  beforeEach(async () => {
+    await db.execute('BEGIN;')
+  })
+
+  afterEach(async () => {
+    await db.execute('ROLLBACK;')
+    await redis.flushdb()
+  })
+
+  it('should return 200 if session is deleted', async () => {
+    const response = await sessions.request(new Request('http://localhost/', {
+      method: 'DELETE',
+    }))
+    expect(await response.json()).toEqual({ data: 'Session deleted' })
+    expect(response.status).toBe(200)
   })
 })
