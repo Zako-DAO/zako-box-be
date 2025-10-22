@@ -6,8 +6,11 @@ import { githubOAuth, sessions } from './handlers'
 import { sessionMessages } from './handlers/session-message'
 import './db'
 
-if (!Bun.env.JWT_SECRET || !Bun.env.JWT_ISSUER) {
-  throw new Error('JWT_SECRET and JWT_ISSUER are required')
+const requiredEnvVars = ['JWT_SECRET', 'JWT_ISSUER', 'DATABASE_URL', 'REDIS_URL']
+for (const envVar of requiredEnvVars) {
+  if (!Bun.env[envVar]) {
+    throw new Error(`${envVar} is required`)
+  }
 }
 
 function corsMiddleware() {
