@@ -79,6 +79,7 @@ export const sessions = new Hono<{ Variables: JwtVariables }>()
     }, Bun.env.JWT_SECRET)
     setCookie(c, 'session', jwt, {
       httpOnly: true,
+      secure: Bun.env.BUN_ENV === 'production',
       maxAge: 60 * 60 * 24,
       sameSite: 'strict',
     })
