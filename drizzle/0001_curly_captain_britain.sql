@@ -1,0 +1,2 @@
+CREATE INDEX "github_accounts_github_id_idx" ON "github_accounts" USING btree ("githubId");--> statement-breakpoint
+CREATE INDEX "github_accounts_user_id_idx" ON "github_accounts" USING btree ("userId");
