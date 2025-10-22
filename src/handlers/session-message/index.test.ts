@@ -46,7 +46,8 @@ describe('create session message', async () => {
     const expectedMessage = generateSessionMessage(Bun.env.TEST_ETH_ADDRESS)
     expect(await response.json()).toEqual({ data: expectedMessage })
 
-    const message = await redis.getdel(getSessionMessageKey(Bun.env.TEST_ETH_ADDRESS))
+    const message = await redis.get(getSessionMessageKey(Bun.env.TEST_ETH_ADDRESS))
+    await redis.del(getSessionMessageKey(Bun.env.TEST_ETH_ADDRESS))
     expect(message).toEqual(expectedMessage)
 
     expect(response.status).toBe(200)
