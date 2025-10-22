@@ -1,3 +1,4 @@
 [test]
 coverage = true
 coverageThreshold = 0.8
+coveragePathIgnorePatterns = [ "src/db/schema.ts", ]

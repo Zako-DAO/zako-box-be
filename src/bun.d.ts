@@ -2,13 +2,14 @@ declare module 'bun' {
   interface Env {
     PORT: number
     JWT_SECRET: string
+    JWT_ISSUER: string
 
-    REDIS_HOST: string
-    REDIS_PORT: number
-    REDIS_PASSWORD: string
-    REDIS_DB: number
+    DATABASE_URL: string
+    REDIS_URL: string
 
-    TEST_ETH_ADDRESS: string
-    TEST_ETH_PRIVATE_KEY: string
+    TEST_ETH_ADDRESS: `0x${string}`
+    TEST_ETH_PRIVATE_KEY: `0x${string}`
+
+    BUN_ENV: 'development' | 'production' | 'staging' | 'testing'
   }
 }

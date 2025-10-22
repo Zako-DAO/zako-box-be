@@ -36,14 +36,27 @@ jobs:
         ports:
           - 16379:6379
         env:
-          REDIS_USERNAME: redis
           REDIS_PASSWORD: redis
+      postgres:
+        image: postgres:16
+        ports:
+          - 15432:5432
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-bun
+      - name: Prepare Database
+        run: bun run db:migrate
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:15432/postgres
       - name: Test
         run: bun test
+
+  # FIXME: add drizzle generation diff check
 
   typecheck:
     name: Type Check

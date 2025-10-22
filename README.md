@@ -2,7 +2,17 @@
 
 ## Development
 
+Copy environment file and fill values to what you want, of course you can use default values.
+
 ```
+cp .env.example .env.local
+```
+
+```
+docker compose down
+docker compose up -d --remove-orphans
+
+bun db:migrate
 bun dev
 ```
 
@@ -11,12 +21,14 @@ bun dev
 Start the database and redis containers.
 
 ```
+docker compose down
 docker compose up -d --remove-orphans
 ```
 
 Run the tests.
 
 ```
+bun db:migrate
 bun test
 ```
 

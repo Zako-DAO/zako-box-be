@@ -15,7 +15,6 @@ services:
     ports:
       - 16379:6379
     environment:
-      REDIS_USERNAME: redis
       REDIS_PASSWORD: redis
     networks:
       - zako-box-network
