@@ -16,7 +16,7 @@ export const githubAccounts = pgTable('github_accounts', {
   refreshToken: varchar({ length: 255 }).notNull(),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp().notNull().defaultNow(),
-}, (table) => ({
+}, table => ({
   githubIdIdx: index('github_accounts_github_id_idx').on(table.githubId),
   userIdIdx: index('github_accounts_user_id_idx').on(table.userId),
 }))
