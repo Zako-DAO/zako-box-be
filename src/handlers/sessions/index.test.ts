@@ -102,7 +102,7 @@ describe('create session', async () => {
   it('should return 401 if session message is not found', async () => {
     const message = generateSessionMessage(Bun.env.TEST_ETH_ADDRESS)
     const signature = await signMessage({
-      message,
+      message: { raw: message },
       privateKey: Bun.env.TEST_ETH_PRIVATE_KEY,
     })
 
