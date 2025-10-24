@@ -10,10 +10,9 @@ export const users = pgTable('users', {
 
 export const githubAccounts = pgTable('github_accounts', {
   id: uuid().primaryKey().defaultRandom(),
-  userId: uuid().references(() => users.internalId),
-  githubId: varchar({ length: 255 }).notNull(),
+  userId: uuid().unique().references(() => users.internalId),
+  githubId: varchar({ length: 255 }).unique().notNull(),
   accessToken: varchar({ length: 255 }).notNull(),
-  refreshToken: varchar({ length: 255 }).notNull(),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp().notNull().defaultNow(),
 }, table => ({

@@ -11,5 +11,8 @@ declare module 'bun' {
     TEST_ETH_PRIVATE_KEY: `0x${string}`
 
     BUN_ENV: 'development' | 'production' | 'staging' | 'testing'
+
+    GITHUB_OAUTH_CLIENT_ID: string
+    GITHUB_OAUTH_CLIENT_SECRET: string
   }
 }
