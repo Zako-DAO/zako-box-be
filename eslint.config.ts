@@ -4,4 +4,7 @@ export default antfu({
   ignores: [
     '.github/**',
   ],
+  rules: {
+    'no-console': 'warn',
+  },
 })

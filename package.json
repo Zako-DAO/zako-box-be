@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@guiiai/logg": "^1.1.0",
+    "@hono/oauth-providers": "^0.8.5",
     "drizzle-orm": "^0.44.6",
     "hono": "^4.10.0",
     "ioredis": "^5.8.1",
