@@ -50,8 +50,7 @@ export const sessions = new Hono<{ Variables: JwtVariables }>()
         signature,
       })
     }
-    catch (error) {
-      console.log('Signature verification failed:', error)
+    catch {
       return c.json({ error: 'Invalid session message signature' }, 400)
     }
 
