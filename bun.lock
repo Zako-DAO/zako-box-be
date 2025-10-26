@@ -5,6 +5,7 @@
       "name": "zako-box-be",
       "dependencies": {
         "@guiiai/logg": "^1.1.0",
+        "@hono/oauth-providers": "^0.8.5",
         "drizzle-orm": "^0.44.6",
         "hono": "^4.10.0",
         "ioredis": "^5.8.1",
@@ -126,6 +127,8 @@
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.4.0", "", { "dependencies": { "@eslint/core": "^0.16.0", "levn": "^0.4.1" } }, "sha512-sB5uyeq+dwCWyPi31B2gQlVlo+j5brPlWx4yZBrEaRo/nhdDE8Xke1gsGgtiBdaBTxuTkceLVuVt/pclrasb0A=="],
 
     "@guiiai/logg": ["@guiiai/logg@1.1.0", "", { "dependencies": { "error-stack-parser": "^2.1.4", "pathe": "^2.0.3" } }, "sha512-phmHJQFGFy75h0bAQ++/hg+PJ1DDzh3/BSl5akS/i+jXOsl/pVO+Hb5ZxMEWu0hrnZwutMlilc8AqJErRYHpyA=="],
+
+    "@hono/oauth-providers": ["@hono/oauth-providers@0.8.5", "", { "peerDependencies": { "hono": ">=3.0.0" } }, "sha512-hgEDH/gUmB/opman9jvT8dLItZsSC9M9yFiaam0b6InK7WQkdzIcaRAkdda47QpixnK9S1Ah2vjDB2U16LkMnA=="],
 
     "@humanfs/core": ["@humanfs/core@0.19.1", "", {}, "sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA=="],
 

@@ -1,2 +1,2 @@
-export * from './github-oauth'
+export * from './github-connections'
 export * from './sessions'
