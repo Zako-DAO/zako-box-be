@@ -229,7 +229,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - '5432:5432'
 
   redis:
     image: redis:7
@@ -238,7 +238,7 @@ services:
     volumes:
       - redis_data:/data
     ports:
-      - "6379:6379"
+      - '6379:6379'
 
 volumes:
   postgres_data:
